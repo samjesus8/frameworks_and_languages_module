@@ -1,4 +1,5 @@
-FROM python:alpine
+FROM node
 WORKDIR /app/
-COPY . .
-CMD ["python", "-m", "http.server", "8000"]
+RUN npm install express
+COPY *.js .
+CMD ["node", "app.js"]
