@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
+	<title>FreeCycle</title>
+	<style>
+		
+	</style>
+	<script src="https://unpkg.com/vue@next"></script> <!-- https://v3.vuejs.org/guide/installation.html#cdn -->
+	<!-- <script src="vue.js"></script> -->
+</head>
+<body>
+	<h1>FreeCycle your old stuff - keep things out of landfill</h1>
+    <h2>
+        Introduction
+		<ul>
+			<li>Help the poor</li>
+			<li>Climate crisis</li>
+			<li>Right to repair</li>
+		</ul>
+    </h2>
+	<div id="app">
+
+		<h2>Attend</h2>
+		<form @submit.prevent="addAttendee">
+			<input name="name" v-model="attendee.name" placeholder="name">
+			<input name="notes" v-model="attendee.notes" placeholder="Notes: i.e. dietary requirements">
+			<button data-action="addAttendee">RSPV</button>
+		</form>
+
+		<h2>Responses</h2>
+		<ul>
+			<li v-for="attendee in attendees">
+				<span data-field="id">{{attendee.id}}</span>
+				<span data-field="name">{{attendee.name}}</span>
+				<span data-field="notes">{{attendee.notes}}</span>
+				<button data-action="delete" @click="deleteAttendee(attendee.id)">Remove</button>
+			</li>
+		</ul>
+
+	</div>
+<script type="module">
+	const urlAPI = ''
+
+	const RootComponent = {
+	  data() {
+		return {
+			attendee: {
+				id: '',
+				name: '',
+				notes: '',
+			},
+			attendees: [],
+		}
+	  },
+	  created() {
+		this.clearInput()
+		this.updateAttendees()
+	  },
+	  components: {
+	  },
+	  methods: {
+		updateAttendees() {
+			fetch(`${urlAPI}/attendees`, {
+			})
+				.then(response => response.json())
+				.then(json => {this.attendees = json})
+			.catch(err => console.error(err))
+		},
+		clearInput() {
+			this.attendee = {...this.attendee, ...{
+				id: Math.random(),
+				name: undefined,
+				notes: undefined,
+			}}
+		},
+		addAttendee() {
+			fetch(`${urlAPI}/attendee`, {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify(this.attendee),
+			})
+				.then(response => response.json())
+				.then(()=>this.clearInput())
+				.then(()=>this.updateAttendees())
+			.catch(err => console.error(err));
+		},
+		deleteAttendee(id) {
+			fetch(`${urlAPI}/attendee/${id}`, {
+				method: 'DELETE',
+			})
+				.then(()=>this.updateAttendees())
+			.catch(err => console.error(err));
+		}
+	  },
+	}
+	const app = Vue.createApp(RootComponent)
+	const vm = app.mount('#app')
+</script>
+
+</body>
+</html>
