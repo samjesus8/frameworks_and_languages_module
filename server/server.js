@@ -6,7 +6,7 @@ const cors = require('cors')
 app.use(express.json());
 app.use(cors())
 
-let ATTENDEES = [
+let ITEMS = [
 
 ]
 
@@ -14,26 +14,30 @@ app.get('/', (req, res) => {
   res.sendFile("client.html", {root: __dirname})
 })
 
-app.get('/attendees', (req, res) => {
-  res.json(ATTENDEES)
+app.get('/items', (req, res) => {
+  res.json(ITEMS)
 })
 
-app.post('/attendee', (req, res) => {
-  if (Object.keys(req.body).sort().toString() != "id,name,notes"){
+// To be implemented. Get a specific item
+//app.get('/item', (req, res) => {})
+
+app.post('/item', (req, res) => {
+  console.log("POST FUNCTION")
+  if (Object.keys(req.body).sort().toString() != "id,user_id,keywords,description,image,lat,lon,date_from,date_to"){
     return res.status(405).json({"message": "missing fields"})
   }
-  ATTENDEES.push(req.body)
+  ITEMS.push(req.body)
   res.status(201).json()
 })
 
-app.delete('/attendee/:id', (req, res) => {
+app.delete('/item/:itemId', (req, res) => {
   const id = parseFloat(req.params.id)
-  ATTENDEES = ATTENDEES.filter(attendee => attendee.id != id)
+  ITEMS = ITEMS.filter(attendee => attendee.id != id)
   res.status(204).json()
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Samuel Jesuthas Assignment listening on port ${port}`)
 })
 
 process.on('SIGINT', function() {process.exit()})

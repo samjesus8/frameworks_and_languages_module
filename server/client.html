@@ -7,13 +7,12 @@
 	<style>
 		
 	</style>
-	<script src="https://unpkg.com/vue@next"></script> <!-- https://v3.vuejs.org/guide/installation.html#cdn -->
+	<script src="https://unpkg.com/vue@next"></script><!-- https://v3.vuejs.org/guide/installation.html#cdn -->
 	<!-- <script src="vue.js"></script> -->
 </head>
 <body>
 	<h1>FreeCycle your old stuff - keep things out of landfill</h1>
     <h2>
-        Introduction
 		<ul>
 			<li>Help the poor</li>
 			<li>Climate crisis</li>
@@ -21,76 +20,88 @@
 		</ul>
     </h2>
 	<div id="app">
-
-		<h2>Attend</h2>
-		<form @submit.prevent="addAttendee">
-			<input name="name" v-model="attendee.name" placeholder="name">
-			<input name="notes" v-model="attendee.notes" placeholder="Notes: i.e. dietary requirements">
-			<button data-action="addAttendee">RSPV</button>
+		<h2>Create</h2>
+		<form @submit.prevent="addItem">
+			<input name="user_id" placeholder="user_id">
+			<input name="lat" placeholder="lat">
+			<input name="lon" placeholder="lon">
+			<input name="image" placeholder="image">
+			<input name="keywords" placeholder="keywords">
+			<textarea name="description" placeholder="description"></textarea>
+			<button data-action="create_item">Create Item</button>
 		</form>
 
-		<h2>Responses</h2>
+		<h2>Items</h2>
 		<ul>
-			<li v-for="attendee in attendees">
-				<span data-field="id">{{attendee.id}}</span>
-				<span data-field="name">{{attendee.name}}</span>
-				<span data-field="notes">{{attendee.notes}}</span>
-				<button data-action="delete" @click="deleteAttendee(attendee.id)">Remove</button>
+			<li v-for="item in items">
+				<img src="item.image">
+				<span data-field="id">{{item.id}}</span>
+				<span data-field="lat">{{item.lat}}</span>
+				<span data-field="lon">{{item.lon}}</span>
+				<span data-field="keywords">{{item.keywords}}</span>
+				<span data-field="description">{{item.description}}</span>
+				<button data-action="delete" someKindOfOnClickAction="deleteItem(item.id)">Delete</button>
 			</li>
 		</ul>
-
 	</div>
+
 <script type="module">
-	const urlAPI = ''
+	const urlAPI = 'http://localhost:8000'
 
 	const RootComponent = {
 	  data() {
 		return {
-			attendee: {
-				id: '',
-				name: '',
-				notes: '',
+			item: {
+				user_id: '',
+				keywords: [],
+				description: '',
+				image: '',
+				lat: '',
+				lon: ''
 			},
-			attendees: [],
+			item: [],
 		}
 	  },
 	  created() {
 		this.clearInput()
-		this.updateAttendees()
+		this.updateItems()
 	  },
 	  components: {
 	  },
 	  methods: {
-		updateAttendees() {
-			fetch(`${urlAPI}/attendees`, {
+		updateItems() {
+			fetch(`${urlAPI}/items`, {
 			})
 				.then(response => response.json())
-				.then(json => {this.attendees = json})
+				.then(json => {this.Items = json})
 			.catch(err => console.error(err))
 		},
 		clearInput() {
-			this.attendee = {...this.attendee, ...{
+			this.item = {...this.item, ...{
 				id: Math.random(),
-				name: undefined,
-				notes: undefined,
+				keywords: undefined,
+				description: undefined,
+				image: undefined,
+				lat: undefined,
+				lon: undefined
 			}}
 		},
-		addAttendee() {
-			fetch(`${urlAPI}/attendee`, {
+		addItem() {
+			fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify(this.attendee),
+				body: JSON.stringify(this.item),
 			})
 				.then(response => response.json())
 				.then(()=>this.clearInput())
-				.then(()=>this.updateAttendees())
+				.then(()=>this.updateItems())
 			.catch(err => console.error(err));
 		},
-		deleteAttendee(id) {
-			fetch(`${urlAPI}/attendee/${id}`, {
+		deleteItem(id) {
+			fetch(`${urlAPI}/item/${id}`, {
 				method: 'DELETE',
 			})
-				.then(()=>this.updateAttendees())
+				.then(()=>this.updateItems())
 			.catch(err => console.error(err));
 		}
 	  },
