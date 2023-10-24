@@ -22,18 +22,33 @@ app.get('/items', (req, res) => {
 //app.get('/item', (req, res) => {})
 
 app.post('/item', (req, res) => {
-  console.log("POST FUNCTION")
-  if (Object.keys(req.body).sort().toString() != "description,image,keywords,lat,lon,user_id"){
+  if (Object.keys(req.body).sort().toString() != "description,image,itemId,keywords,lat,lon,user_id"){
+    console.log("POST 405");
+    console.log(req.body);
     return res.status(405).json({"message": "missing fields"})
   }
   ITEMS.push(req.body)
+  console.log("POST 201")
   res.status(201).json()
 })
 
 app.delete('/item/:itemId', (req, res) => {
-  const id = parseFloat(req.params.id)
-  ITEMS = ITEMS.filter(items => items.id != id)
-  res.status(204).json()
+  const itemId = parseFloat(req.params.itemId); // Parse the ID parameter
+
+  // Find the index of the item with the specified ID
+  const itemIndex = ITEMS.findIndex(item => item.itemId === itemId);
+
+  // Check if the item was found
+  if (itemIndex === -1) {
+    return res.status(404).json({ message: 'Item not found' });
+  }
+
+  // Delete the item from the ITEMS array
+  ITEMS.splice(itemIndex, 1);
+
+  // Respond with a 204 status code indicating a successful deletion
+  console.log("DELETE 204 itemId: " + itemId);
+  res.status(204).json();
 })
 
 app.listen(port, () => {

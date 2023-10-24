@@ -54,6 +54,7 @@
 		  data() {
 			return {
 			  newItem: {
+				itemId: '',
 				user_id: '',
 				keywords: [],
 				description: '',
@@ -81,6 +82,7 @@
 			},
 			clearInput() {
 			  this.newItem = {
+				itemId: '',
 				user_id: '',
 				keywords: [],
 				description: '',
@@ -90,6 +92,7 @@
 			  };
 			},
 			addItem() {
+				this.newItem.itemId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 			  fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -99,8 +102,8 @@
 				.then(() => this.updateItems())
 				.catch((err) => console.error(err));
 			},
-			deleteItem(id) {
-			  fetch(`${urlAPI}/item/${id}`, {
+			deleteItem(itemId) {
+			  fetch(`${urlAPI}/item/${itemId}`, {
 				method: 'DELETE',
 			  })
 				.then(() => this.updateItems())
