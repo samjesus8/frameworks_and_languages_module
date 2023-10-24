@@ -15,11 +15,26 @@ app.get('/', (req, res) => {
 })
 
 app.get('/items', (req, res) => {
+  console.log("GET 200")
   res.json(ITEMS)
 })
 
-// To be implemented. Get a specific item
-//app.get('/item', (req, res) => {})
+app.get('/item/:itemId', (req, res) => {
+  const itemId = parseFloat(req.params.itemId); // Parse the ID parameter
+
+  // Find the item with the specified ID
+  const item = ITEMS.find(item => item.itemId === itemId);
+
+  // Check if the item was found
+  if (!item) {
+    console.log("GET /item/{itemId} 404 itemId: " + itemId);
+    return res.status(404).json({ message: 'Item not found' });
+  }
+
+  // Respond with a 200 status code and the specific item in valid JSON format
+  console.log("GET /item/{itemId} 200")
+  res.status(200).json(item);
+})
 
 app.post('/item', (req, res) => {
   if (Object.keys(req.body).sort().toString() != "description,image,itemId,keywords,lat,lon,user_id"){
