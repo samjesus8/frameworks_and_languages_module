@@ -61,6 +61,8 @@
 				image: '',
 				lat: '',
 				lon: '',
+				date_from: '',
+				date_to: ''
 			  },
 			  items: [],
 			};
@@ -89,10 +91,14 @@
 				image: '',
 				lat: '',
 				lon: '',
+				date_from: '',
+				date_to: ''
 			  };
 			},
 			addItem() {
 				this.newItem.itemId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+				this.newItem.date_from = new Date().toISOString();
+				this.newItem.date_to = new Date().toISOString();
 			  fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },

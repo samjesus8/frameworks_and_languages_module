@@ -37,7 +37,7 @@ app.get('/item/:itemId', (req, res) => {
 })
 
 app.post('/item', (req, res) => {
-  if (Object.keys(req.body).sort().toString() != "description,image,itemId,keywords,lat,lon,user_id"){
+  if (Object.keys(req.body).sort().toString() != "date_from,date_to,description,image,itemId,keywords,lat,lon,user_id"){
     console.log("POST 405");
     console.log(req.body);
     return res.status(405).json({"message": "missing fields"})
