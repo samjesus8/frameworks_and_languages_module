@@ -28,7 +28,7 @@
 			<input v-model="newItem.lat" name="lat" placeholder="lat">
 			<input v-model="newItem.lon" name="lon" placeholder="lon">
 			<input v-model="newItem.image" name="image" placeholder="image">
-			<input v-model="newItem.keywords" name="keywords" placeholder="keywords">
+			<input v-model="keywordsInput" name="keywords" placeholder="keywords">
 			<textarea v-model="newItem.description" name="description" placeholder="description"></textarea>
 			<button data-action="create_item">Create Item</button>
 		  </form>
@@ -99,12 +99,16 @@
 				this.newItem.itemId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 				this.newItem.date_from = new Date().toISOString();
 				this.newItem.date_to = new Date().toISOString();
+
+				const keywordsArray = this.keywordsInput.split(',');
+				this.newItem.keywords = keywordsArray;
 			  fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(this.newItem),
 			  })
 				.then(() => this.clearInput())
+				.then(() => this.keywordsInput = '')
 				.then(() => this.updateItems())
 				.catch((err) => console.error(err));
 			},
