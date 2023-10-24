@@ -23,7 +23,7 @@ app.get('/items', (req, res) => {
 
 app.post('/item', (req, res) => {
   console.log("POST FUNCTION")
-  if (Object.keys(req.body).sort().toString() != "id,user_id,keywords,description,image,lat,lon,date_from,date_to"){
+  if (Object.keys(req.body).sort().toString() != "description,image,keywords,lat,lon,user_id"){
     return res.status(405).json({"message": "missing fields"})
   }
   ITEMS.push(req.body)
@@ -32,7 +32,7 @@ app.post('/item', (req, res) => {
 
 app.delete('/item/:itemId', (req, res) => {
   const id = parseFloat(req.params.id)
-  ITEMS = ITEMS.filter(attendee => attendee.id != id)
+  ITEMS = ITEMS.filter(items => items.id != id)
   res.status(204).json()
 })
 
