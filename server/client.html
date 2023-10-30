@@ -36,13 +36,13 @@
 		<h2>Items</h2>
 		<ul>
 			<li v-for="item in items">
-				<span data-field="user_id">{{item.id}}</span>
+				<span data-field="user_id">{{item.user_id}}</span>
 				<span data-field="lat">{{item.lat}}</span>
 				<span data-field="lon">{{item.lon}}</span>
 				<span data-field="keywords">{{item.keywords}}</span>
 				<span data-field="image">{{item.image}}</span>
 				<span data-field="description">{{item.description}}</span>
-				<button data-action="delete" @click="deleteItem(item.itemId)">Delete</button>
+				<button data-action="delete_item" @click="deleteItem(item.id)">Delete</button>
 			</li>
 		</ul>
 	</div>
@@ -54,7 +54,7 @@
 		  data() {
 			return {
 			  newItem: {
-				itemId: '',
+				id: '',
 				user_id: '',
 				keywords: [],
 				description: '',
@@ -84,7 +84,7 @@
 			},
 			clearInput() {
 			  this.newItem = {
-				itemId: '',
+				id: '',
 				user_id: '',
 				keywords: [],
 				description: '',
@@ -96,7 +96,7 @@
 			  };
 			},
 			addItem() {
-				this.newItem.itemId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+				this.newItem.id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 				this.newItem.date_from = new Date().toISOString();
 				this.newItem.date_to = new Date().toISOString();
 
