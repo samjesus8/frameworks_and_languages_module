@@ -33,8 +33,8 @@ def isiterable(iterable):
 @pytest.fixture
 def new_item(ENDPOINT):
     ITEM = {
-        'user_id': "user1234",
-        'keywords': ["hammer", "nails", "tools"],
+        "user_id": "user1234",
+        "keywords": ["hammer", "nails", "tools"],
         "description": "A hammer and nails set",
         "lat": (random.random() * (70*2)) - 70,
         "lon": (random.random() * (180*2)) - 180,
@@ -44,16 +44,11 @@ def new_item(ENDPOINT):
 
 
 def test_port(ENDPOINT):
-    """
-    Check port if open
-    """
-    pass
+    response = requests.get(ENDPOINT)
+    assert response.status_code == 200
 
 
 def test_root(ENDPOINT):
-    """
-    Base endpoint should return html of some form to the user.
-    """
     response = requests.get(ENDPOINT)
     assert response.status_code == 200
     assert 'text/html' in response.headers['Content-type']
@@ -65,7 +60,8 @@ def test_item_post_405(ENDPOINT):
         "b": 2,
     }
     response = requests.post(ENDPOINT + '/item', json=ITEM)
-    assert response.status_code == 405
+    assert response.status_code == 405, f"Expected 405, but received {response.status_code}. Response content: {response.content}"
+
 
 def test_item_post_201(ENDPOINT):
     """

@@ -12,8 +12,8 @@ let ITEMS = [
     "user_id": "Sam1234",
     "keywords": [
       "Word1",
-      " Word2",
-      " Word3"
+      "Word2",
+      "Word3"
     ],
     "description": "111111111111",
     "image": "https://i.imgur.com/SCEwQdK.jpeg",
@@ -25,12 +25,12 @@ let ITEMS = [
 ]
 
 app.get('/', (req, res) => {
-  res.sendFile("client.html", {root: __dirname})
+  res.status(200).sendFile("client.html", {root: __dirname});
 })
 
 app.get('/items', (req, res) => {
   console.log("GET 200");
-  res.json(ITEMS)
+  res.status(200).json(ITEMS);
 })
 
 app.get('/item/:itemId', (req, res) => {
@@ -51,14 +51,45 @@ app.get('/item/:itemId', (req, res) => {
 })
 
 app.post('/item', (req, res) => {
-  if (Object.keys(req.body).sort().toString() != "date_from,date_to,description,id,image,keywords,lat,lon,user_id"){
-    console.log("POST 405");
+  const expectedFields = ['user_id', 'keywords', 'description', 'image', 'lat', 'lon'];
+  
+  // Check if all expected fields are present in the request body
+  const allFieldsPresent = expectedFields.every(field => field in req.body);
+
+  if (!allFieldsPresent) {
+    console.log("POST 405 - Missing Fields");
     console.log(req.body);
-    return res.status(405).json({"message": "missing fields"})
+    return res.status(405).json({"message": "missing fields"});
   }
-  ITEMS.push(req.body)
-  console.log("POST 201");
-  res.status(201).json()
+
+  //Check if the JSON is in the correct format
+  if (
+    typeof req.body.user_id !== 'string' ||
+    !Array.isArray(req.body.keywords) ||
+    typeof req.body.description !== 'string' ||
+    typeof req.body.image !== 'string' ||
+    typeof req.body.lat !== 'number' ||
+    typeof req.body.lon !== 'number'
+  ) {
+    console.log("POST 405 - Invalid Input Structure");
+    console.log(req.body);
+    return res.status(405).json({"message": "Invalid Input Structure"});
+  }
+
+  //If all checks are correct, generate any missing details
+  const newItem = {
+    ...req.body,
+    // Generate 'id'
+    id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+    // Generate 'date_from' and 'date_to' (using the current date)
+    date_from: new Date().toISOString(),
+    date_to: new Date().toISOString()
+  };
+
+  //Add item to list and complete
+  ITEMS.push(newItem);
+  console.log("POST 201 - Item Created");
+  res.status(201).json(newItem);
 })
 
 app.delete('/item/:itemId', (req, res) => {
@@ -76,7 +107,7 @@ app.delete('/item/:itemId', (req, res) => {
   ITEMS.splice(itemIndex, 1);
 
   // Respond with a 204 status code indicating a successful deletion
-  console.log("DELETE 204 id: " + itemID);
+  console.log("DELETE 204 id: " + itemID.toString());
   res.status(204).json();
 })
 

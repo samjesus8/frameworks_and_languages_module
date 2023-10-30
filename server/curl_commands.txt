@@ -1,0 +1,19 @@
+CURL Commands for Testing in terminal
+====================================
+
+POST Request
+====================================
+curl -v -X POST http://localhost:8000/item -H "Content-Type: application/json" -d '{"user_id":"user1234","keywords":["hammer","nails","tools"],"description":"A hammer and nails set","image":"https://placekitten.com/200/300","lat":51.2798438,"lon":1.0830275}'
+
+GET Request
+====================================
+curl -v -X GET http://localhost:8000/items
+curl -v -X GET http://localhost:8000/item/itemId
+
+DELETE Request
+====================================
+curl -v -X DELETE http://localhost:8000/item/itemId
+
+OPTIONS Request
+====================================
+curl -v -X OPTIONS http://localhost:8000/
