@@ -34,14 +34,14 @@ app.get('/items', (req, res) => {
 })
 
 app.get('/item/:itemId', (req, res) => {
-  const itemId = parseFloat(req.params.id); // Parse the ID parameter
+  const itemID = parseFloat(req.params.itemId); // Parse the ID parameter
 
   // Find the item with the specified ID
-  const item = ITEMS.find(item => item.id === itemId);
+  const item = ITEMS.find(item => item.id === itemID);
 
   // Check if the item was found
   if (!item) {
-    console.log("GET /item/{itemId} 404 id: " + itemId);
+    console.log("GET /item/{itemId} 404 id: " + itemId.toString());
     return res.status(404).json({ message: 'Item not found' });
   }
 
@@ -51,36 +51,39 @@ app.get('/item/:itemId', (req, res) => {
 })
 
 app.post('/item', (req, res) => {
-  const expectedFields = ["user_id", "keywords", "description", "image", "lat", "lon"];
-  
-  // Check if all expected fields are present in the request body
-  const allFieldsPresent = expectedFields.every(field => field in req.body);
+  let expectedFields = ['user_id', 'keywords', 'description', 'image', 'lat', 'lon'];
+  const retrievedFields = Object.keys(req.body).toString().split(",");
 
-  if (!allFieldsPresent) {
-    console.log("POST 405 - Missing Fields");
-    console.log(req.body);
-    return res.status(405).json({"message": "missing fields"});
+  // Check if all expected fields are present in the request body and have valid non-empty values
+  let numberOfExpectedFields = 5;
+  let fieldCount = 0;
+
+  //If image was parsed in, check for 6 fields, instead stick to 5
+  if (retrievedFields[3] === 'image' || retrievedFields[4] === 'image'){
+    numberOfExpectedFields++;
+  }
+  else{
+    expectedFields.splice(3, 1);
   }
 
-  //Check if the JSON is in the correct format
-  if (
-    typeof req.body.user_id !== 'string' ||
-    !Array.isArray(req.body.keywords) || !req.body.keywords.every(keyword => typeof keyword === 'string') ||
-    typeof req.body.description !== 'string' ||
-    typeof req.body.image !== 'string' ||
-    typeof req.body.lat !== 'number' || isNaN(req.body.lat) ||
-    typeof req.body.lon !== 'number' || isNaN(req.body.lon)
-  ) {
-    console.log("POST 405 - Invalid Input Structure");
+  for (let i = 0; i < expectedFields.length; i++){
+    if (retrievedFields[i] == expectedFields[i]){
+      fieldCount++;
+    }
+  }
+
+  if (fieldCount !== numberOfExpectedFields) {
+    console.log("POST 405 - Missing or Invalid Fields");
     console.log(req.body);
-    return res.status(405).json({"message": "Invalid Input Structure"});
+    return res.status(405).json({"message": "missing or invalid fields"});
   }
 
   //If all checks are correct, generate any missing details
   let newItem = {
-    ...req.body,
     // Generate 'id'
     id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+
+    ...req.body,
 
     // Generate 'date_from' and 'date_to' (using the current date)
     date_from: new Date().toISOString(),

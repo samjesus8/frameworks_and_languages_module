@@ -47,7 +47,6 @@ def test_port(ENDPOINT):
     response = requests.get(ENDPOINT)
     assert response.status_code == 200
 
-
 def test_root(ENDPOINT):
     response = requests.get(ENDPOINT)
     assert response.status_code == 200
@@ -61,7 +60,6 @@ def test_item_post_405(ENDPOINT):
     }
     response = requests.post(ENDPOINT + '/item', json=ITEM)
     assert response.status_code == 405, f"Expected 405, but received {response.status_code}. Response content: {response.content}"
-
 
 def test_item_post_201(ENDPOINT):
     """
@@ -86,6 +84,7 @@ def test_item_get_200(ENDPOINT, new_item):
     """
     response = requests.get(f"{ENDPOINT}/item/{new_item['id']}")
     assert response.status_code == 200
+
 def test_item_get_200_fields(ENDPOINT, new_item):
     """
     When we GET an individual item, it should have all of the fields that were returned by the creation POST
