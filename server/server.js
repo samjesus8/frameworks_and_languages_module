@@ -41,7 +41,7 @@ app.get('/item/:itemId', (req, res) => {
 
   // Check if the item was found
   if (!item) {
-    console.log("GET /item/{itemId} 404 id: " + itemId.toString());
+    console.log("GET /item/{itemId} 404 id: " + itemID.toString());
     return res.status(404).json({ message: 'Item not found' });
   }
 
@@ -97,13 +97,13 @@ app.post('/item', (req, res) => {
 })
 
 app.delete('/item/:itemId', (req, res) => {
-  const itemID = parseFloat(req.params.id); // Parse the ID parameter
+  const itemID = parseFloat(req.params.itemId); // Parse the ID parameter
 
   // Find the index of the item with the specified ID
   const itemIndex = ITEMS.findIndex(item => item.id === itemID);
 
   // Check if the item was found
-  if (itemIndex === 0) {
+  if (itemIndex === -1) {
     return res.status(404).json({ message: 'Item not found' });
   }
 

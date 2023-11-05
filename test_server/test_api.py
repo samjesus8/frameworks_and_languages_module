@@ -42,7 +42,6 @@ def new_item(ENDPOINT):
     response = requests.post(ENDPOINT + '/item', json=ITEM)
     yield response.json()
 
-
 def test_port(ENDPOINT):
     response = requests.get(ENDPOINT)
     assert response.status_code == 200
@@ -108,6 +107,7 @@ def test_items_get_200(ENDPOINT):
     assert response.status_code == 200
     items = response.json()
     assert isinstance(items, list)
+
 def test_items_get_200_fields(ENDPOINT, new_item):
     """
     After POSTing an item, a GET to /items should have our new item as a last entry of the list/array
