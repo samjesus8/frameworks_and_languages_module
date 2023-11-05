@@ -54,17 +54,15 @@
 		  data() {
 			return {
 			  newItem: {
-				id: '',
 				user_id: '',
 				keywords: [],
 				description: '',
 				image: '',
 				lat: '',
-				lon: '',
-				date_from: '',
-				date_to: ''
+				lon: ''
 			  },
 			  items: [],
+			  keywordsInput: ''
 			};
 		  },
 		  created() {
@@ -84,28 +82,29 @@
 			},
 			clearInput() {
 			  this.newItem = {
-				id: '',
 				user_id: '',
 				keywords: [],
 				description: '',
 				image: '',
 				lat: '',
-				lon: '',
-				date_from: '',
-				date_to: ''
+				lon: ''
 			  };
 			},
 			addItem() {
-				this.newItem.id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-				this.newItem.date_from = new Date().toISOString();
-				this.newItem.date_to = new Date().toISOString();
+			  const keywordsArray = this.keywordsInput.split(',');
+			  this.newItem.keywords = keywordsArray;
 
-				const keywordsArray = this.keywordsInput.split(',');
-				this.newItem.keywords = keywordsArray;
+			  // Convert lat and lon to numbers
+			  this.newItem.lat = parseFloat(this.newItem.lat);
+			  this.newItem.lon = parseFloat(this.newItem.lon);
+	  
+			  // Omitting the id, date_from, and date_to fields
+			  const { id, date_from, date_to, ...dataToSend } = this.newItem;
+	  
 			  fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(this.newItem),
+				body: JSON.stringify(dataToSend),
 			  })
 				.then(() => this.clearInput())
 				.then(() => this.keywordsInput = '')

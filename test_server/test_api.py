@@ -69,11 +69,11 @@ def test_item_post_201(ENDPOINT):
     The created object must have an id field
     """
     ITEM = {
-        'user_id': "user1234",
-        'keywords': ["hammer", "nails", "tools"],
+        "user_id": "user1234",
+        "keywords": ["hammer", "nails", "tools"],
         "description": "A hammer and nails set. In canterbury",
         "lat": 51.2798438,
-        "lon": 1.0830275,
+        "lon": 1.0830275
     }
     response = requests.post(f'{ENDPOINT}/item', json=ITEM)
     assert response.status_code == 201

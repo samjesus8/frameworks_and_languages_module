@@ -17,15 +17,15 @@ let ITEMS = [
     ],
     "description": "111111111111",
     "image": "https://i.imgur.com/SCEwQdK.jpeg",
-    "lat": "13.16937",
-    "lon": "-82.39787",
+    "lat": 13.16937,
+    "lon": -82.39787,
     "date_from": "2023-10-30T11:09:14.606Z",
     "date_to": "2023-10-30T11:09:14.606Z"
   }
 ]
 
 app.get('/', (req, res) => {
-  res.status(200).sendFile("client.html", {root: __dirname});
+  res.status(200).sendFile("/workspaces/frameworks_and_languages_module/client/client.html");
 })
 
 app.get('/items', (req, res) => {
@@ -51,7 +51,7 @@ app.get('/item/:itemId', (req, res) => {
 })
 
 app.post('/item', (req, res) => {
-  const expectedFields = ['user_id', 'keywords', 'description', 'image', 'lat', 'lon'];
+  const expectedFields = ["user_id", "keywords", "description", "image", "lat", "lon"];
   
   // Check if all expected fields are present in the request body
   const allFieldsPresent = expectedFields.every(field => field in req.body);
@@ -65,11 +65,11 @@ app.post('/item', (req, res) => {
   //Check if the JSON is in the correct format
   if (
     typeof req.body.user_id !== 'string' ||
-    !Array.isArray(req.body.keywords) ||
+    !Array.isArray(req.body.keywords) || !req.body.keywords.every(keyword => typeof keyword === 'string') ||
     typeof req.body.description !== 'string' ||
     typeof req.body.image !== 'string' ||
-    typeof req.body.lat !== 'number' ||
-    typeof req.body.lon !== 'number'
+    typeof req.body.lat !== 'number' || isNaN(req.body.lat) ||
+    typeof req.body.lon !== 'number' || isNaN(req.body.lon)
   ) {
     console.log("POST 405 - Invalid Input Structure");
     console.log(req.body);
@@ -77,10 +77,11 @@ app.post('/item', (req, res) => {
   }
 
   //If all checks are correct, generate any missing details
-  const newItem = {
+  let newItem = {
     ...req.body,
     // Generate 'id'
     id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+
     // Generate 'date_from' and 'date_to' (using the current date)
     date_from: new Date().toISOString(),
     date_to: new Date().toISOString()
