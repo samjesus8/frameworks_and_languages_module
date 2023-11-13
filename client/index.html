@@ -48,7 +48,9 @@
 	</div>
 
 	<script type="module">
-		const urlAPI = '';
+		
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlAPI = (urlParams.get('api') || DEFAULT_API).replace(/\/$/, '');
 	  
 		const RootComponent = {
 		  data() {

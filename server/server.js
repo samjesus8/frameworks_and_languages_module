@@ -25,7 +25,8 @@ let ITEMS = [
 ]
 
 app.get('/', (req, res) => {
-  res.status(200).sendFile("/workspaces/frameworks_and_languages_module/client/client.html");
+  //const filePath = path.join(__dirname, 'client.html');
+  res.status(200).sendFile("client.html", {root: __dirname});
 })
 
 app.get('/items', (req, res) => {
@@ -116,7 +117,7 @@ app.delete('/item/:itemId', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Samuel Jesuthas Assignment listening on port ${port}`);
+  console.log(`Server running on port ${port}`);
 })
 
 process.on('SIGINT', function() {process.exit()})
