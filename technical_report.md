@@ -3,19 +3,29 @@ Technical Report
 
 (intro describing purpose of report - 200ish words)
 
+This report endeavors to delve into the intricacies of programming frameworks and languages, elucidating their significance and utility in addressing programming-related challenges. To accomplish this objective, an examination of various features pertaining to both client and server aspects of Frameworks/Languages will be conducted. Furthermore, an in-depth analysis of an existing prototype will be undertaken, aiming to identify potential shortcomings and ascertain its compatibility within a corporate environment.
 
 Critique of Server/Client prototype
 ---------------------
 
 ### Overview
-()
 
-### (name of Issue 1)
+### CORS Default Parameter
 
-(A code snippet example demonstrating the issue)
-(Explain why this pattern is problematic - 40ish words)
+`./example_server/app/http_server.py`
+```python
+RESPONSE_DEFAULTS = {
+    'code': 200, 
+    'body': '',
+    'Content-type': 'text/html; charset=utf-8',
+    'Server': 'CustomHTTP/0.0 Python/3.9.0+',
+    'Access-Control-Allow-Origin': '*'
+}
+```
 
-### (name of Issue 2)
+These are the default responses set on this web-server unless it has been specified/overridden elsewhere. The `Access-Control-Allow-Origin` has been set by default to allow outside domains to access our server, which makes this server vulnerable to possible security related issues
+
+### Lack of Middleware
 
 (A code snippet example demonstrating the issue)
 (Explain why this pattern is problematic - 40ish words)
