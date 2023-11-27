@@ -49,6 +49,7 @@
 
 	<script type="module">
 		
+		const DEFAULT_API = '/api/v1';
 		const urlParams = new URLSearchParams(window.location.search);
 		const urlAPI = (urlParams.get('api') || DEFAULT_API).replace(/\/$/, '');
 	  
