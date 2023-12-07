@@ -2,6 +2,7 @@ from wsgiref.simple_server import make_server
 import falcon
 from falcon_cors import CORS
 import json
+from datetime import datetime
 
 # "pip install falcon-cors" in order to use this
 # Enabling use of CORS middleware (OPTIONS request)
@@ -79,18 +80,57 @@ class ItemResource:
                 return item
         return None
 
+class CreateItemResource:
+    def on_post(self, req, resp):
+        # Parse the JSON payload from the request body
+        try:
+            req_data = json.loads(req.bounded_stream.read().decode('utf-8'))
+        except json.JSONDecodeError:
+            resp.status = falcon.HTTP_400
+            resp.text = "Invalid JSON payload"
+            return
+
+        # Check if all expected fields are present in the request body and have valid non-empty values
+        expected_fields = ['user_id', 'keywords', 'description', 'image', 'lat', 'lon']
+        if not all(field in req_data and req_data[field] for field in expected_fields):
+            resp.status = falcon.HTTP_405
+            resp.text = "Invalid input - some input fields may be missing"
+            return
+
+        # If 'image' is provided, check for 6 fields; otherwise, stick to 5
+        if 'image' in req_data:
+            expected_fields.append('image')
+        else:
+            expected_fields.remove('image')
+
+        # Generate missing details
+        new_item = {
+            'id': int(datetime.now().timestamp() * 1000000),  # 15-digit timestamp as an integer
+            **req_data,
+            'date_from': datetime.now().isoformat(), # Date in ISO format
+            'date_to': datetime.now().isoformat(),
+        }
+
+        # Add item to the list
+        ItemsResource.items.append(new_item)
+
+        resp.status = falcon.HTTP_201
+        resp.text = json.dumps(new_item, indent=2)
+
 
 app = falcon.App(middleware=[cors.middleware])  # Instantiate App with CORS middleware
 
 # Create instances of the resource classes
+root = RootResource()
 items = ItemsResource()
 item = ItemResource()
-root = RootResource()
+create_item = CreateItemResource()
 
 # ENDPOINTS
 app.add_route("/", root)
 app.add_route('/items', items)
 app.add_route("/item/{item_id}", item)
+app.add_route("/item", create_item, methods=['POST'])
 
 if __name__ == "__main__":
     with make_server("", 8000, app) as httpd:
