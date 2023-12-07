@@ -60,6 +60,12 @@ class ItemsResource:
                 return item
         return None
 
+    def get_item_index_by_id(self, item_id):
+        for i, item in enumerate(self.items):
+            if item["id"] == item_id:
+                return i
+        return -1
+
 class ItemResource:
     def on_get(self, req, resp, item_id):
         # Parse the ID parameter
@@ -117,6 +123,31 @@ class CreateItemResource:
         resp.status = falcon.HTTP_201
         resp.text = json.dumps(new_item, indent=2)
 
+class DeleteItemResource:
+    def on_delete(self, req, resp, item_id):
+        # Parse the ID parameter
+        item_id = int(item_id)
+
+        # Find the index of the item with the specified ID
+        item_index = items.get_item_index_by_id(item_id)
+
+        # Check if the item was found
+        if item_index == -1:
+            resp.status = falcon.HTTP_404 # Return 404 if no item was found
+            resp.text = "Item not found"
+            return
+
+        # Delete the item from the ITEMS array
+        ItemsResource.items.pop(item_index)
+
+        # Respond with a 204 status code indicating a successful deletion
+        resp.status = falcon.HTTP_204
+
+    def get_item_index_by_id(self, item_id):
+        for i, item in enumerate(ItemsResource.items):
+            if item["id"] == item_id:
+                return i
+        return -1
 
 app = falcon.App(middleware=[cors.middleware])  # Instantiate App with CORS middleware
 
@@ -125,12 +156,14 @@ root = RootResource()
 items = ItemsResource()
 item = ItemResource()
 create_item = CreateItemResource()
+delete_item = DeleteItemResource()
 
 # ENDPOINTS
 app.add_route("/", root)
 app.add_route('/items', items)
 app.add_route("/item/{item_id}", item)
 app.add_route("/item", create_item, methods=['POST'])
+app.add_route("/item/{item_id}", delete_item, methods=['DELETE'])
 
 if __name__ == "__main__":
     with make_server("", 8000, app) as httpd:
