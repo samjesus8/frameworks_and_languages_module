@@ -2,15 +2,30 @@ from wsgiref.simple_server import make_server
 import falcon
 import json
 
+class RootResource:
+    def on_get(self, req, resp):
+        try:
+            # Serve the client.html file when accessing the root endpoint
+            with open("client.html", "r") as file:
+                resp.status = falcon.HTTP_200
+                resp.content_type = "text/html"
+                resp.text = file.read()
+        except FileNotFoundError:
+            resp.status = falcon.HTTP_404
+            resp.text = "File not found"
+        except Exception as e:
+            resp.status = falcon.HTTP_500
+            resp.text = f"Internal Server Error: {str(e)}"
+
 class ItemsResource:
     items = [  
         {
             "id": 3528640174782866,
             "user_id": "Sam1234",
             "keywords": [
-            "Word1",
-            "Word2",
-            "Word3"
+                "Word1",
+                "Word2",
+                "Word3"
             ],
             "description": "111111111111",
             "image": "https://i.imgur.com/SCEwQdK.jpeg",
@@ -21,22 +36,53 @@ class ItemsResource:
         }
     ]
 
-    def on_get(self, req, resp):
-        """Handles GET requests"""
-        resp.status = falcon.HTTP_200  # This is the default status
+    def on_get(self, req, resp): ## Handles GET /items
+        resp.status = falcon.HTTP_200
         resp.text = json.dumps(self.items, indent=2)
+
+    def get_item_by_id(self, item_id): ## Handles GET /item/{itemId}
+        for item in ItemsResource.items:
+            if item["id"] == item_id:
+                return item
+        return None
+
+class ItemResource:
+    def on_get(self, req, resp, item_id):
+        # Parse the ID parameter
+        item_id = int(item_id)
+
+        # Find the item with the specified ID
+        item = items.get_item_by_id(item_id)
+        if item:
+            resp.status = falcon.HTTP_200
+            resp.text = json.dumps(item, indent=2)
+        else:
+            resp.status = falcon.HTTP_404
+            resp.text = "Item not found"
+
+    def get_item_by_id(self, item_id): ## Handles GET /item/{itemId}
+        for item in ItemsResource.items:
+            if item["id"] == item_id:
+                return item
+        return None
+
 
 app = falcon.App()
 
-# Resources are represented by long-lived class instances
+# Create instances of the resource classes
 items = ItemsResource()
+item = ItemResource()
+root = RootResource()
 
-# items will handle all requests to the '/items' URL path
+# ENDPOINTS
+app.add_route("/", root)
 app.add_route('/items', items)
+app.add_route("/item/{item_id}", item)
 
-if __name__ == '__main__':
-    with make_server('', 8000, app) as httpd:
-        print('Serving on port 8000...')
-
-        # Serve until process is killed
-        httpd.serve_forever()
+if __name__ == "__main__":
+    with make_server("", 8000, app) as httpd:
+        print("Serving on port 8000...")
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("Server shutting down...")
