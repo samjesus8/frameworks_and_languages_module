@@ -1,6 +1,11 @@
 from wsgiref.simple_server import make_server
 import falcon
+from falcon_cors import CORS
 import json
+
+# "pip install falcon-cors" in order to use this
+# Enabling use of CORS middleware (OPTIONS request)
+cors = CORS(allow_all_origins=True, allow_all_headers=True, allow_all_methods=True)
 
 class RootResource:
     def on_get(self, req, resp):
@@ -16,6 +21,14 @@ class RootResource:
         except Exception as e:
             resp.status = falcon.HTTP_500
             resp.text = f"Internal Server Error: {str(e)}"
+
+    def on_options(self, req, resp):
+        # Respond to CORS requests
+        resp.status = falcon.HTTP_200
+        resp.set_header('Allow', 'GET, OPTIONS')
+        resp.set_header('Access-Control-Allow-Origin', '*')
+        resp.set_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        resp.set_header('Access-Control-Allow-Headers', '*')
 
 class ItemsResource:
     items = [  
@@ -67,7 +80,7 @@ class ItemResource:
         return None
 
 
-app = falcon.App()
+app = falcon.App(middleware=[cors.middleware])  # Instantiate App with CORS middleware
 
 # Create instances of the resource classes
 items = ItemsResource()
