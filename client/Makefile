@@ -1,4 +1,4 @@
-DOCKER_IMAGE:=client
+DOCKER_IMAGE:=vuejs-client
 
 build:
 	docker build --tag ${DOCKER_IMAGE} .
