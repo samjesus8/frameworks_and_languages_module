@@ -5,15 +5,16 @@ import CreateItemForm from './components/CreateItemForm';
 
 const App = () => {
   const [items, setItems] = useState([]);
+  const apiUrl = new URLSearchParams(window.location.search).get('api').replace(/\/$/, '');
 
   const updateItems = () => {
-    axios.get('/api/v1/items')
+    axios.get(`${apiUrl}/items`)
       .then(response => setItems(response.data))
       .catch(error => console.error(error));
   };
 
   const addItem = (newItem) => {
-    axios.post('/api/v1/item', newItem)
+    axios.post(`${apiUrl}/item`, newItem)
       .then(() => {
         updateItems();
       })
@@ -21,7 +22,7 @@ const App = () => {
   };
 
   const deleteItem = (itemId) => {
-    axios.delete(`/api/v1/item/${itemId}`)
+    axios.delete(`${apiUrl}/item/${itemId}`)
       .then(() => {
         updateItems();
       })
@@ -30,7 +31,7 @@ const App = () => {
 
   useEffect(() => {
     updateItems();
-  }, []);
+  }, [apiUrl]);
 
   return (
     <div>

@@ -28,7 +28,14 @@ const CreateItemForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(newItem);
+    onSubmit({
+      user_id: newItem.user_id,
+      keywords: newItem.keywords,
+      description: newItem.description,
+      image: newItem.image,
+      lat: newItem.lat,
+      lon: newItem.lon,
+    });
     setNewItem({
       user_id: '',
       lat: '',
