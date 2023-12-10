@@ -17,6 +17,7 @@ class RootResource:
                 resp.content_type = "text/html"
                 resp.text = file.read()
         except FileNotFoundError:
+            # If it cannot find client.html then return 404
             resp.status = falcon.HTTP_404
             resp.text = "File not found"
         except Exception as e:
@@ -120,6 +121,7 @@ class CreateItemResource:
         # Add item to the list
         ItemsResource.items.append(new_item)
 
+        # Return 201 and the JSON data
         resp.status = falcon.HTTP_201
         resp.text = json.dumps(new_item, indent=2)
 

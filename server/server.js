@@ -24,16 +24,18 @@ let ITEMS = [
   }
 ]
 
+// Root ENDPOINT
 app.get('/', (req, res) => {
-  //const filePath = path.join(__dirname, 'client.html');
   res.status(200).sendFile("client.html", {root: __dirname});
 })
 
+// /items ENDPOINT
 app.get('/items', (req, res) => {
   console.log("GET 200");
   res.status(200).json(ITEMS);
 })
 
+// /item/{itemId} ENDPOINT
 app.get('/item/:itemId', (req, res) => {
   const itemID = parseFloat(req.params.itemId); // Parse the ID parameter
 
@@ -51,6 +53,7 @@ app.get('/item/:itemId', (req, res) => {
   res.status(200).json(item);
 })
 
+// /item POST
 app.post('/item', (req, res) => {
   let expectedFields = ['user_id', 'keywords', 'description', 'image', 'lat', 'lon'];
   const retrievedFields = Object.keys(req.body).toString().split(",");
@@ -97,6 +100,7 @@ app.post('/item', (req, res) => {
   res.status(201).json(newItem);
 })
 
+// /item/{itemId} DELETE
 app.delete('/item/:itemId', (req, res) => {
   const itemID = parseFloat(req.params.itemId); // Parse the ID parameter
 
@@ -120,4 +124,5 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 })
 
+// Ensures that CTRL - C ends the program without crashing
 process.on('SIGINT', function() {process.exit()})
