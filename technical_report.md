@@ -3,7 +3,7 @@ Technical Report
 
 (intro describing purpose of report - 200ish words)
 
-This report endeavors to delve into the intricacies of programming frameworks and languages, elucidating their significance and utility in addressing programming-related challenges. To accomplish this objective, an examination of various features pertaining to both client and server aspects of Frameworks/Languages will be conducted. Furthermore, an in-depth analysis of an existing prototype will be undertaken, aiming to identify potential shortcomings and ascertain its compatibility within a corporate environment.
+This report endeavors to delve into the intricacies of programming frameworks and languages, their significance and utility in addressing programming-related challenges. To accomplish this objective, an examination of various features pertaining to both client and server aspects of Frameworks/Languages will be conducted. Furthermore, an in-depth analysis of an existing prototype will be undertaken, aiming to identify potential shortcomings and ascertain its compatibility within a corporate environment.
 
 Critique of Server/Client prototype
 ---------------------
