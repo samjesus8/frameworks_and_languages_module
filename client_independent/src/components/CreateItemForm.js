@@ -89,7 +89,7 @@ const CreateItemForm = ({ onSubmit }) => {
         onChange={handleInputChange}
         placeholder="description"
       ></textarea>
-      <button type="submit">Create Item</button>
+      <button data-action="create_item" type="submit">Create Item</button>
     </form>
   );
 };
