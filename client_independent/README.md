@@ -5,15 +5,15 @@
 
 ## How to Run
 
-1. Install axios for HTTP requests
+1. Install axios to ensure React can handle HTTP requests
     ```
-    npm install axios
+    $ npm install axios
     ```
 2. Then run the application using `npm`
     ```
-    npm start
+    $ npm start
     ```
-3. Link with the server using `?api=`
+3. Link with the server using `?api=` in your browser
     ```
     http://client:3000/?api=http://server:8000
     ```
@@ -26,17 +26,16 @@ You can also run this client in a Docker container. Here are some methods to get
 
 1. Make sure you are in the `.../client/independent_client` directory
     ```
-    .../frameworks_and_languages_module/client/independent_client (main) $ 
+    $ cd client/independent_client
     ```
 2. Using the Dockerfile, build your container
     ```
-    docker build -t name-of-container .
+    $ docker build -t name-of-container .
     ```
 3. Once the container has successfully built, run the container
     ```
-    docker run -p 8001:3000 name-of-container
+    $ docker run -p 8001:8001 name-of-container
     ```
-    This will re-direct the port 3000 to run on 8001 and serve your client
 
 ### Makefile
 
@@ -44,5 +43,5 @@ You can also run this client in a Docker container. Here are some methods to get
 
 2. Now using the `Makefile`, you can build and run the Docker container at once by doing
     ```
-    make build run
+    $ make build run
     ```
