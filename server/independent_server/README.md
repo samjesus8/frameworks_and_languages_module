@@ -39,7 +39,7 @@ You can run this server in a Docker Container. Here are some ways to get you up 
 
 ### Manual Build/Run
 
-1. Make sure you are in the `.../server` directory
+1. Make sure you are in the `.../server/independent_server` directory
 
 2. Then build your Docker container by doing the following command
 

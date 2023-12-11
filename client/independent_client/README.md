@@ -15,7 +15,7 @@
     ```
 3. Link with the server using `?api=`
     ```
-        http://client:3000/?api=http://server:8000
+    http://client:3000/?api=http://server:8000
     ```
 
 ## Running in Docker

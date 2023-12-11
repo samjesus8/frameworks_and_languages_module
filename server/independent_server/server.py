@@ -26,7 +26,7 @@ class RootResource:
 
     def on_options(self, req, resp):
         # Respond to CORS requests
-        resp.status = falcon.HTTP_200
+        resp.status = falcon.HTTP_204
         resp.set_header('Allow', 'GET, OPTIONS')
         resp.set_header('Access-Control-Allow-Origin', '*')
         resp.set_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
@@ -92,6 +92,7 @@ class CreateItemResource:
         # Parse the JSON payload from the request body
         try:
             req_data = json.loads(req.bounded_stream.read().decode('utf-8'))
+            print(req_data)
         except json.JSONDecodeError:
             resp.status = falcon.HTTP_400
             resp.text = "Invalid JSON payload"
@@ -99,16 +100,17 @@ class CreateItemResource:
 
         # Check if all expected fields are present in the request body and have valid non-empty values
         expected_fields = ['user_id', 'keywords', 'description', 'image', 'lat', 'lon']
+
+        # If 'image' is provided, check for 6 fields; otherwise, stick to 5
+        if 'image' in req_data:
+            print(req_data)
+        else:
+            expected_fields.remove('image')
+
         if not all(field in req_data and req_data[field] for field in expected_fields):
             resp.status = falcon.HTTP_405
             resp.text = "Invalid input - some input fields may be missing"
             return
-
-        # If 'image' is provided, check for 6 fields; otherwise, stick to 5
-        if 'image' in req_data:
-            expected_fields.append('image')
-        else:
-            expected_fields.remove('image')
 
         # Generate missing details
         new_item = {
