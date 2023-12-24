@@ -77,29 +77,74 @@ def serve_app(func_app, port, host=''):
 Server Framework Features
 -------------------------
 
-### (name of Feature 1)
+### Built-in Middleware support
+
+- Middleware in a server model, allows the ability to do pre/post processing on a request before it gets to the output. This can involve things like authentication, JSON request parsing and even logging
+- This is an example of middleware implementation in Django:
+
+```python
+# Middleware class example in Django
+class CustomMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Custom middleware before view is called
+        response = self.get_response(request)
+        # Return the response after it has been processed by the middleware
+        return response
+```
+- The reason middleware is so important is because it allows a structured way to process requests, which improves the modularity and ease to work on the server code. This solves the problem of the communication between different frameworks, without having to modify the main logic, or hardcode lots of logic into the main code due to the lack of middleware
+
+    - [Django Middleware documentation](https://docs.djangoproject.com/en/5.0/topics/http/middleware/)
+    - [AWS - What is middleware?](https://aws.amazon.com/what-is/middleware/)
+
+### Routing and URL Mapping
+
+- Server frameworks allow easy organization of endpoints. In a business environment, a server may have several hundreds of endpoints and it would be cumbersome to manually code in every single URL that is possible in your website.
+- You can see in this Flask Example, it is very simple to create an endpoint and assign a method/function to it:
+
+```python
+# Routing example in Flask
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Hello, World!'
+```
+- You can add multiple endpoints by using the `@app.route()` attribute, which improves the manageability of this server
+- Routing simplifies the organization of code by associating specific functions or handlers with defined endpoints. This improves the readability, scalability, and efficient request handling.
+    - [Flask Routing](https://pythonbasics.org/flask-tutorial-routes/)
+
+### Request/Response Handling and Serialization
 
 (Technical description of the feature - 40ish words)
 (A code block snippet example demonstrating the feature)
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
 (Provide reference urls to your sources of information about the feature - required)
 
+- A good feature of server frameworks is the built-in ability to handle incoming web requests. They also have the ability to handle data, and serializing request bodies so that it is inline with the API specification
+- We can see this in this Falcon example:
 
-### (name of Feature 2)
+```python
+# Request handling and response serialization in Falcon
+import falcon
+import json
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+class Resource:
+    def on_get(self, req, resp):
+        resp.status = falcon.HTTP_200
+        resp.body = json.dumps({'message': 'Hello, Falcon!'})
 
+app = falcon.App()
+app.add_route('/hello', Resource())
+```
 
-### (name of Feature 3)
-
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
-
+- What we are doing is assigning the Class `Resource` to the endpoint `/hello`. And in this class, is a function for handling a simple `GET` request. The method returns `200` as the status code and it returns a JSON body with a simple message `Hello, Falcon!`
+- Built-in request/response handling simplifies developers' tasks which reduces boilerplate code. Frameworks often provide serializers for converting complex data types to and from formats like JSON, enhancing ease of use.
+    - [Falcon Request Handling](https://falcon.readthedocs.io/en/3.1.3/api/request_and_response_wsgi.html)
 
 Server Language Features
 -----------------------
