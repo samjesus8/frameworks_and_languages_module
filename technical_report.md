@@ -28,44 +28,44 @@ These are the default responses set on this web-server unless it has been specif
 - The lack of middleware is evident in the absence of a modular component responsible for processing requests before they reach the main application logic
 - This can be seen in the `serve_app` function in the `http_server.py` file, where this method is directly handling the request without doing any middleware processing. A middleware layer could be added between receiving the request and invoking the main application, allowing for more flexibility and separation of concerns.
 
-```python
-def serve_app(func_app, port, host=''):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind((host, port))
-        while True:
-            s.listen()
-            try:
-                conn, addr = s.accept()
-            except KeyboardInterrupt as ex:
-                break
-            with conn:
-                #log.debug(f'Connected by ')
-                #while True:
-                    data = conn.recv(65535)  # If the request does not come though in a single recv/packet then this server will fail and will not composit multiple TCP packets. Sometimes the head and the body are sent in sequential packets. This happens when the system switches task under load.
-                    #if not data: break
-                    try:
-                        request = parse_request(data)
-                    except InvalidHTTPRequest as ex:
-                        log.exception("InvalidHTTPRequest")
-                        continue
+    ```python
+    def serve_app(func_app, port, host=''):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind((host, port))
+            while True:
+                s.listen()
+                try:
+                    conn, addr = s.accept()
+                except KeyboardInterrupt as ex:
+                    break
+                with conn:
+                    #log.debug(f'Connected by ')
+                    #while True:
+                        data = conn.recv(65535)  # If the request does not come though in a single recv/packet then this server will fail and will not composit multiple TCP packets. Sometimes the head and the body are sent in sequential packets. This happens when the system switches task under load.
+                        #if not data: break
+                        try:
+                            request = parse_request(data)
+                        except InvalidHTTPRequest as ex:
+                            log.exception("InvalidHTTPRequest")
+                            continue
 
-                    # HACK: If we don't have a complete message - try to botch another recv - I feel dirty doing this 
-                    # This probably wont work because utf8 decoded data will have a different content length 
-                    # This needs more testing
-                    while int(request.get('content-length', 0)) > len(request['body']):
-                        request['body'] += conn.recv(65535).decode('utf8')
+                        # HACK: If we don't have a complete message - try to botch another recv - I feel dirty doing this 
+                        # This probably wont work because utf8 decoded data will have a different content length 
+                        # This needs more testing
+                        while int(request.get('content-length', 0)) > len(request['body']):
+                            request['body'] += conn.recv(65535).decode('utf8')
 
-                    try:
-                        response = func_app(request)
-                    except Exception as ex:
-                        log.error(request)
-                        traceback.print_exc()
-                        response = {'code': 500, 'body': f'<PRE>{traceback.format_exc()}</PRE>'}
-                    # TODO: the code and content length do not work here - they are currently applied in encode response.
-                    log.info(f"{addr} - {request.get('path')} - {response.get('code')} {response.get('Content-length')}")
-                    conn.send(encode_response(response))
-```
+                        try:
+                            response = func_app(request)
+                        except Exception as ex:
+                            log.error(request)
+                            traceback.print_exc()
+                            response = {'code': 500, 'body': f'<PRE>{traceback.format_exc()}</PRE>'}
+                        # TODO: the code and content length do not work here - they are currently applied in encode response.
+                        log.info(f"{addr} - {request.get('path')} - {response.get('code')} {response.get('Content-length')}")
+                        conn.send(encode_response(response))
+    ```
 
 - This absence of middleware can lead to challenges in maintaining and extending the server, as modifications or additions to request processing logic would need to be directly implemented in the main application code.
 
@@ -82,18 +82,19 @@ Server Framework Features
 - Middleware in a server model, allows the ability to do pre/post processing on a request before it gets to the output. This can involve things like authentication, JSON request parsing and even logging
 - This is an example of middleware implementation in Django:
 
-```python
-# Middleware class example in Django
-class CustomMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
+    ```python
+    # Middleware class example in Django
+    class CustomMiddleware:
+        def __init__(self, get_response):
+            self.get_response = get_response
 
-    def __call__(self, request):
-        # Custom middleware before view is called
-        response = self.get_response(request)
-        # Return the response after it has been processed by the middleware
-        return response
-```
+        def __call__(self, request):
+            # Custom middleware before view is called
+            response = self.get_response(request)
+            # Return the response after it has been processed by the middleware
+            return response
+    ```
+
 - The reason middleware is so important is because it allows a structured way to process requests, which improves the modularity and ease to work on the server code. This solves the problem of the communication between different frameworks, without having to modify the main logic, or hardcode lots of logic into the main code due to the lack of middleware
 
     - [Django Middleware documentation](https://docs.djangoproject.com/en/5.0/topics/http/middleware/)
@@ -104,43 +105,38 @@ class CustomMiddleware:
 - Server frameworks allow easy organization of endpoints. In a business environment, a server may have several hundreds of endpoints and it would be cumbersome to manually code in every single URL that is possible in your website.
 - You can see in this Flask Example, it is very simple to create an endpoint and assign a method/function to it:
 
-```python
-# Routing example in Flask
-from flask import Flask
+    ```python
+    # Routing example in Flask
+    from flask import Flask
 
-app = Flask(__name__)
+    app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
-```
+    @app.route('/')
+    def home():
+        return 'Hello, World!'
+    ```
 - You can add multiple endpoints by using the `@app.route()` attribute, which improves the manageability of this server
 - Routing simplifies the organization of code by associating specific functions or handlers with defined endpoints. This improves the readability, scalability, and efficient request handling.
     - [Flask Routing](https://pythonbasics.org/flask-tutorial-routes/)
 
 ### Request/Response Handling and Serialization
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
-
 - A good feature of server frameworks is the built-in ability to handle incoming web requests. They also have the ability to handle data, and serializing request bodies so that it is inline with the API specification
 - We can see this in this Falcon example:
 
-```python
-# Request handling and response serialization in Falcon
-import falcon
-import json
+    ```python
+    # Request handling and response serialization in Falcon
+    import falcon
+    import json
 
-class Resource:
-    def on_get(self, req, resp):
-        resp.status = falcon.HTTP_200
-        resp.body = json.dumps({'message': 'Hello, Falcon!'})
+    class Resource:
+        def on_get(self, req, resp):
+            resp.status = falcon.HTTP_200
+            resp.body = json.dumps({'message': 'Hello, Falcon!'})
 
-app = falcon.App()
-app.add_route('/hello', Resource())
-```
+    app = falcon.App()
+    app.add_route('/hello', Resource())
+    ```
 
 - What we are doing is assigning the Class `Resource` to the endpoint `/hello`. And in this class, is a function for handling a simple `GET` request. The method returns `200` as the status code and it returns a JSON body with a simple message `Hello, Falcon!`
 - Built-in request/response handling simplifies developers' tasks which reduces boilerplate code. Frameworks often provide serializers for converting complex data types to and from formats like JSON, enhancing ease of use.
@@ -149,27 +145,49 @@ app.add_route('/hello', Resource())
 Server Language Features
 -----------------------
 
-### (name of Feature 1)
+### Asynchronous Programming in Python
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+- This feature in python is provided by the `asyncio` library, which allows non-blocking execution of tasks. Running a program asynchronously usually increases the performance of the program, however it is down to the developer to ensure each event is managed properly
+- This is a simple async implementation in python, which just prints "start" and then waits for 2 seconds before printing "end"
+
+    ```python
+    import asyncio
+
+    async def async_example():
+        print("Start")
+        await asyncio.sleep(2)
+        print("End")
+
+    asyncio.run(async_example())
+    ```
+
+- Asynchronous programming enhances server efficiency by enabling concurrent execution of multiple tasks, preventing blocking operations, and improving overall responsiveness in applications with high I/O operations.
+    - [Python asyncio](https://docs.python.org/3/library/asyncio.html)
 
 
-### (name of Feature 2)
+### Typescript in Node.js
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+- Typescript is actually a superset of JavaScript, which provides static typing for Node.js
+- This feature allows you to be able to catch potential errors during development, enhance the readability of your code, and overall improves the maintainability of your server
 
+    ```typescript
+    interface User {
+    id: number;
+    username: string;
+    }
 
+    function getUserInfo(user: User): string {
+    return `ID: ${user.id}, Username: ${user.username}`;
+    }
+    ```
+
+- THe main benefits of this feature is that it heavily reduces debugging & development time, as it helps catch type-related errors early in the development process, which in return makes your code more robust.
+    - [TypeScript for JS Developers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 Client Framework Features
 -------------------------
 
-### (name of Feature 1)
+### 
 
 (Technical description of the feature - 40ish words)
 (A code block snippet example demonstrating the feature)
