@@ -187,29 +187,95 @@ Server Language Features
 Client Framework Features
 -------------------------
 
-### 
+### React Hooks for State Management
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+- React Hooks, like `useState` and `useEffect`, enable functional components to manage state and side effects. They streamline code by replacing class-based components, providing a more concise and readable structure.
+
+```javascript
+import React, { useState, useEffect } from 'react';
+
+function ExampleComponent() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `Count: ${count}`;
+  }, [count]);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+- React Hooks simplify state management and side effect handling in functional components, making code more readable, reducing boilerplate, and enhancing the overall developer experience.
+    - [React Hooks](https://react.dev/reference/react/hooks)
 
 
-### (name of Feature 2)
+### Vue.js Single File Components
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+- Vue.js Single File Components encapsulates a component's template, script, and styles in one single file. This organized structure enhances readability, maintainability, and allows for better component-based development.
 
+```html
+<template>
+  <div>
+    <h1>{{ message }}</h1>
+  </div>
+</template>
 
-### (name of Feature 3)
+<script>
+export default {
+  data() {
+    return {
+      message: 'Hello, Vue!'
+    };
+  }
+}
+</script>
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+<style scoped>
+h1 {
+  color: blue;
+}
+</style>
+```
 
+- You can see this is a HTML file, however we have the main HTML boilerplate, a script, and a CSS stylesheet all in the same file. Therefore reducing the amount of individual JS or CSS files you have to work with
+- This simplifies your overall code and it allows for certain parts of your code to be reusable, making this a cleaner and more maintainable client project
+    - [Vue.js Single File Components](https://vuejs.org/guide/scaling-up/sfc.html)
+
+### Angular Dependency Injection
+
+- Angular's Dependency Injection system allows components and services to request dependencies rather than creating them. This promotes modular and testable code by facilitating the management of component dependencies.
+
+```javascript
+import { Component } from '@angular/core';
+
+@Injectable()
+class DataService {
+  getData() {
+    // Fetch data logic
+  }
+}
+
+@Component({
+  selector: 'app-example',
+  template: '<p>{{ data }}</p>'
+})
+export class ExampleComponent {
+  constructor(private dataService: DataService) {
+    this.data = this.dataService.getData();
+  }
+}
+```
+
+- Dependency Injection is built-in for Angular. When a dependency is requested, the Injector checks its database to see if there is an existing instance available. This is what the `Injectable` attribute is for, which shows that a class can be injected via DI.
+- This promotes code modularity, reusability, and testability by providing a centralized way to manage and inject dependencies into components and services.
+    - [Angular DI Guide](https://angular.io/guide/dependency-injection)
 
 Client Language Features
 ------------------------
