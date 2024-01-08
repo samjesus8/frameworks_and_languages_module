@@ -97,8 +97,8 @@ Server Framework Features
 
 - The reason middleware is so important is because it allows a structured way to process requests, which improves the modularity and ease to work on the server code. This solves the problem of the communication between different frameworks, without having to modify the main logic, or hardcode lots of logic into the main code due to the lack of middleware
 
-    - [Django Middleware documentation](https://docs.djangoproject.com/en/5.0/topics/http/middleware/)
-    - [AWS - What is middleware?](https://aws.amazon.com/what-is/middleware/)
+    - What is ... (1978) Amazon. Available at: https://aws.amazon.com/what-is/middleware/ (Accessed: 24 December 2023).
+    - Middleware. Available at: https://docs.djangoproject.com/en/5.0/topics/http/middleware/ (Accessed: 24 December 2023). 
 
 ### Routing and URL Mapping
 
@@ -117,7 +117,7 @@ Server Framework Features
     ```
 - You can add multiple endpoints by using the `@app.route()` attribute, which improves the manageability of this server
 - Routing simplifies the organization of code by associating specific functions or handlers with defined endpoints. This improves the readability, scalability, and efficient request handling.
-    - [Flask Routing](https://pythonbasics.org/flask-tutorial-routes/)
+    - Flask Tutorial: Routes (no date) Flask Tutorial: Routes - Python Tutorial. Available at: https://pythonbasics.org/flask-tutorial-routes/ (Accessed: 25 December 2023).
 
 ### Request/Response Handling and Serialization
 
@@ -140,7 +140,7 @@ Server Framework Features
 
 - What we are doing is assigning the Class `Resource` to the endpoint `/hello`. And in this class, is a function for handling a simple `GET` request. The method returns `200` as the status code and it returns a JSON body with a simple message `Hello, Falcon!`
 - Built-in request/response handling simplifies developers' tasks which reduces boilerplate code. Frameworks often provide serializers for converting complex data types to and from formats like JSON, enhancing ease of use.
-    - [Falcon Request Handling](https://falcon.readthedocs.io/en/3.1.3/api/request_and_response_wsgi.html)
+    - WSGI Request & Response - Falcon 3.1.3 documentation. Available at: https://falcon.readthedocs.io/en/3.1.3/api/request_and_response_wsgi.html (Accessed: 25 December 2023). 
 
 Server Language Features
 -----------------------
@@ -162,7 +162,7 @@ Server Language Features
     ```
 
 - Asynchronous programming enhances server efficiency by enabling concurrent execution of multiple tasks, preventing blocking operations, and improving overall responsiveness in applications with high I/O operations.
-    - [Python asyncio](https://docs.python.org/3/library/asyncio.html)
+    - Asyncio - asynchronous I/O Python documentation. Available at: https://docs.python.org/3/library/asyncio.html (Accessed: 04 January 2024). 
 
 
 ### Typescript in Node.js
@@ -182,7 +182,7 @@ Server Language Features
     ```
 
 - THe main benefits of this feature is that it heavily reduces debugging & development time, as it helps catch type-related errors early in the development process, which in return makes your code more robust.
-    - [TypeScript for JS Developers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+    - Documentation - typescript for JavaScript programmers TypeScript. Available at: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html (Accessed: 04 January 2024). 
 
 Client Framework Features
 -------------------------
@@ -213,7 +213,7 @@ function ExampleComponent() {
 ```
 
 - React Hooks simplify state management and side effect handling in functional components, making code more readable, reducing boilerplate, and enhancing the overall developer experience.
-    - [React Hooks](https://react.dev/reference/react/hooks)
+    - Built-in react hooks. Available at: https://react.dev/reference/react/hooks (Accessed: 04 January 2024). 
 
 
 ### Vue.js Single File Components
@@ -246,7 +246,7 @@ h1 {
 
 - You can see this is a HTML file, however we have the main HTML boilerplate, a script, and a CSS stylesheet all in the same file. Therefore reducing the amount of individual JS or CSS files you have to work with
 - This simplifies your overall code and it allows for certain parts of your code to be reusable, making this a cleaner and more maintainable client project
-    - [Vue.js Single File Components](https://vuejs.org/guide/scaling-up/sfc.html)
+    - Vue.js Single-File Components | Vue.js. Available at: https://vuejs.org/guide/scaling-up/sfc.html (Accessed: 04 January 2024). 
 
 ### Angular Dependency Injection
 
@@ -275,7 +275,7 @@ export class ExampleComponent {
 
 - Dependency Injection is built-in for Angular. When a dependency is requested, the Injector checks its database to see if there is an existing instance available. This is what the `Injectable` attribute is for, which shows that a class can be injected via DI.
 - This promotes code modularity, reusability, and testability by providing a centralized way to manage and inject dependencies into components and services.
-    - [Angular DI Guide](https://angular.io/guide/dependency-injection)
+    - Angular | Understanding dependency injection (no date) Angular. Available at: https://angular.io/guide/dependency-injection (Accessed: 04 January 2024). 
 
 Client Language Features
 ------------------------
