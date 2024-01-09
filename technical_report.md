@@ -1,7 +1,7 @@
 Technical Report
 ================
 
-This report endeavors to delve into the intricacies of programming frameworks and languages, their significance, and their utility in addressing programming-related challenges. To accomplish this objective, an examination of various features on both client and server aspects of Frameworks/Languages will be conducted. Furthermore, an in-depth analysis of an existing prototype will be undertaken, aiming to identify potential shortcomings and ascertain its compatibility within a corporate environment.
+This report endeavors to delve into great detail on programming frameworks and languages and their importance in addressing programming-related challenges. To accomplish this objective, an examination of various features on both client and server aspects of Frameworks/Languages will be conducted. Furthermore, an in-depth analysis of an existing prototype will be undertaken, aiming to identify potential shortcomings and ascertain its compatibility within a corporate environment.
 
 Critique of Server/Client prototype
 ---------------------
@@ -26,6 +26,7 @@ These are the default responses set on this web-server unless it has been specif
 ### Lack of Middleware
 
 - The lack of middleware is evident in the absence of a modular component responsible for processing requests before they reach the main application logic
+
 - This can be seen in the `serve_app` function in the `http_server.py` file, where this method is directly handling the request without doing any middleware processing. A middleware layer could be added between receiving the request and invoking the main application, allowing for more flexibility and separation of concerns.
 
     ```python
@@ -97,8 +98,10 @@ Server Framework Features
 
 - The reason middleware is so important is because it allows a structured way to process requests, which improves the modularity and ease to work on the server code. This solves the problem of the communication between different frameworks, without having to modify the main logic, or hardcode lots of logic into the main code due to the lack of middleware
 
-    - What is ... (1978) Amazon. Available at: https://aws.amazon.com/what-is/middleware/ (Accessed: 24 December 2023).
-    - Middleware. Available at: https://docs.djangoproject.com/en/5.0/topics/http/middleware/ (Accessed: 24 December 2023). 
+
+What is ... (1978) Amazon. Available at: https://aws.amazon.com/what-is/middleware/ (Accessed: 24 December 2023).
+
+Middleware. Available at: https://docs.djangoproject.com/en/5.0/topics/http/middleware/ (Accessed: 24 December 2023). 
 
 ### Routing and URL Mapping
 
@@ -117,7 +120,8 @@ Server Framework Features
     ```
 - You can add multiple endpoints by using the `@app.route()` attribute, which improves the manageability of this server
 - Routing simplifies the organization of code by associating specific functions or handlers with defined endpoints. This improves the readability, scalability, and efficient request handling.
-    - Flask Tutorial: Routes (no date) Flask Tutorial: Routes - Python Tutorial. Available at: https://pythonbasics.org/flask-tutorial-routes/ (Accessed: 25 December 2023).
+
+Flask Tutorial: Routes (no date) Flask Tutorial: Routes - Python Tutorial. Available at: https://pythonbasics.org/flask-tutorial-routes/ (Accessed: 25 December 2023).
 
 ### Request/Response Handling and Serialization
 
@@ -140,7 +144,8 @@ Server Framework Features
 
 - What we are doing is assigning the Class `Resource` to the endpoint `/hello`. And in this class, is a function for handling a simple `GET` request. The method returns `200` as the status code and it returns a JSON body with a simple message `Hello, Falcon!`
 - Built-in request/response handling simplifies developers' tasks which reduces boilerplate code. Frameworks often provide serializers for converting complex data types to and from formats like JSON, enhancing ease of use.
-    - WSGI Request & Response - Falcon 3.1.3 documentation. Available at: https://falcon.readthedocs.io/en/3.1.3/api/request_and_response_wsgi.html (Accessed: 25 December 2023). 
+
+WSGI Request & Response - Falcon 3.1.3 documentation. Available at: https://falcon.readthedocs.io/en/3.1.3/api/request_and_response_wsgi.html (Accessed: 25 December 2023). 
 
 Server Language Features
 -----------------------
@@ -162,7 +167,8 @@ Server Language Features
     ```
 
 - Asynchronous programming enhances server efficiency by enabling concurrent execution of multiple tasks, preventing blocking operations, and improving overall responsiveness in applications with high I/O operations.
-    - Asyncio - asynchronous I/O Python documentation. Available at: https://docs.python.org/3/library/asyncio.html (Accessed: 04 January 2024). 
+
+Asyncio - asynchronous I/O Python documentation. Available at: https://docs.python.org/3/library/asyncio.html (Accessed: 04 January 2024). 
 
 
 ### Typescript in Node.js
@@ -181,8 +187,9 @@ Server Language Features
     }
     ```
 
-- THe main benefits of this feature is that it heavily reduces debugging & development time, as it helps catch type-related errors early in the development process, which in return makes your code more robust.
-    - Documentation - typescript for JavaScript programmers TypeScript. Available at: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html (Accessed: 04 January 2024). 
+- The main benefits of this feature is that it heavily reduces debugging & development time, as it helps catch type-related errors early in the development process, which in return makes your code more robust.
+
+Documentation - typescript for JavaScript programmers TypeScript. Available at: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html (Accessed: 04 January 2024). 
 
 Client Framework Features
 -------------------------
@@ -191,113 +198,138 @@ Client Framework Features
 
 - React Hooks, like `useState` and `useEffect`, enable functional components to manage state and side effects. They streamline code by replacing class-based components, providing a more concise and readable structure.
 
-```javascript
-import React, { useState, useEffect } from 'react';
+  ```javascript
+  import React, { useState, useEffect } from 'react';
 
-function ExampleComponent() {
-  const [count, setCount] = useState(0);
+  function ExampleComponent() {
+    const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    document.title = `Count: ${count}`;
-  }, [count]);
+    useEffect(() => {
+      document.title = `Count: ${count}`;
+    }, [count]);
 
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-    </div>
-  );
-}
-```
+    return (
+      <div>
+        <p>You clicked {count} times</p>
+        <button onClick={() => setCount(count + 1)}>
+          Click me
+        </button>
+      </div>
+    );
+  }
+  ```
 
 - React Hooks simplify state management and side effect handling in functional components, making code more readable, reducing boilerplate, and enhancing the overall developer experience.
-    - Built-in react hooks. Available at: https://react.dev/reference/react/hooks (Accessed: 04 January 2024). 
+
+Built-in react hooks. Available at: https://react.dev/reference/react/hooks (Accessed: 04 January 2024). 
 
 
 ### Vue.js Single File Components
 
 - Vue.js Single File Components encapsulates a component's template, script, and styles in one single file. This organized structure enhances readability, maintainability, and allows for better component-based development.
 
-```html
-<template>
-  <div>
-    <h1>{{ message }}</h1>
-  </div>
-</template>
+  ```html
+  <template>
+    <div>
+      <h1>{{ message }}</h1>
+    </div>
+  </template>
 
-<script>
-export default {
-  data() {
-    return {
-      message: 'Hello, Vue!'
-    };
+  <script>
+  export default {
+    data() {
+      return {
+        message: 'Hello, Vue!'
+      };
+    }
   }
-}
-</script>
+  </script>
 
-<style scoped>
-h1 {
-  color: blue;
-}
-</style>
-```
+  <style scoped>
+  h1 {
+    color: blue;
+  }
+  </style>
+  ```
 
 - You can see this is a HTML file, however we have the main HTML boilerplate, a script, and a CSS stylesheet all in the same file. Therefore reducing the amount of individual JS or CSS files you have to work with
 - This simplifies your overall code and it allows for certain parts of your code to be reusable, making this a cleaner and more maintainable client project
-    - Vue.js Single-File Components | Vue.js. Available at: https://vuejs.org/guide/scaling-up/sfc.html (Accessed: 04 January 2024). 
+
+Vue.js Single-File Components | Vue.js. Available at: https://vuejs.org/guide/scaling-up/sfc.html (Accessed: 04 January 2024). 
 
 ### Angular Dependency Injection
 
 - Angular's Dependency Injection system allows components and services to request dependencies rather than creating them. This promotes modular and testable code by facilitating the management of component dependencies.
 
-```javascript
-import { Component } from '@angular/core';
+  ```javascript
+  import { Component } from '@angular/core';
 
-@Injectable()
-class DataService {
-  getData() {
-    // Fetch data logic
+  @Injectable()
+  class DataService {
+    getData() {
+      // Fetch data logic
+    }
   }
-}
 
-@Component({
-  selector: 'app-example',
-  template: '<p>{{ data }}</p>'
-})
-export class ExampleComponent {
-  constructor(private dataService: DataService) {
-    this.data = this.dataService.getData();
+  @Component({
+    selector: 'app-example',
+    template: '<p>{{ data }}</p>'
+  })
+  export class ExampleComponent {
+    constructor(private dataService: DataService) {
+      this.data = this.dataService.getData();
+    }
   }
-}
-```
+  ```
 
 - Dependency Injection is built-in for Angular. When a dependency is requested, the Injector checks its database to see if there is an existing instance available. This is what the `Injectable` attribute is for, which shows that a class can be injected via DI.
 - This promotes code modularity, reusability, and testability by providing a centralized way to manage and inject dependencies into components and services.
-    - Angular | Understanding dependency injection (no date) Angular. Available at: https://angular.io/guide/dependency-injection (Accessed: 04 January 2024). 
+
+Angular | Understanding dependency injection (no date) Angular. Available at: https://angular.io/guide/dependency-injection (Accessed: 04 January 2024). 
 
 Client Language Features
 ------------------------
 
-### (name of Feature 1)
+### JavaScript Arrow Functions
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+- This feature allows you to simplify a lot of code by providing a shorter syntax for certain functions, which are more implicit
+- In this Javascript Example, you can see a simple function which adds 2 numbers together
+  ```javascript
+  // Traditional function
+  function add(a, b) {
+    return a + b;
+  }
 
-### (name of Feature 2)
+  // Arrow function
+  const addArrow = (a, b) => a + b;
+  ```
+  - The arrow function simplifies the entire `add()` function into one line by using the `=>` syntax. 
+  - We are basically saying for a temporary set of parameters called `(a, b)`, perform the following function which is `a + b`, and we are then storing it in a variable
+- This feature reduces the amount of code you write by a lot in big projects, and it improves the overall readability of your code, which is a huge benefit to developers
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+MozDevNet Arrow function expressions - javascript: MDN, MDN Web Docs. Available at: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions (Accessed: 08 January 2024). 
 
+### Enums in TypeScript
 
+- A great tool to use in TypeScript is enums, which are very useful for declaring a custom set of constant values, which makes the different values easier to access in code
+- You can see this in the below example, where a simple Direction enum is being declared
+  ```typescript
+    enum Direction {
+    Up = 'UP',
+    Down = 'DOWN',
+    Left = 'LEFT',
+    Right = 'RIGHT'
+  }
 
-Conclusions
+  let playerDirection: Direction = Direction.Up;
+  ```
+  - We have declared custom variables for each direction like Up, Down etc. And we can use this enum to clearly access the constant you need. This helps reduce a lot of duplicated code and it's easier to maintain because enums are a clear, structured way to represent constants
+
+  Handbook - enums (no date) TypeScript. Available at: https://www.typescriptlang.org/docs/handbook/enums.html (Accessed: 08 January 2024). 
+
+Conclusion
 -----------
 
-(justify why frameworks are recommended - 120ish words)
-(justify which frameworks should be used and why 180ish words)
+Frameworks play a pivotal role in modern software development, offering developers a structured and efficient approach to building robust applications. They provide a foundation of pre-built components, tools, accelerating development and ensuring best developer practices. Frameworks streamline repetitive tasks, enhance code organization, and improve collaboration within development teams. The abstraction of common functionalities allows developers to focus on application-specific logic, increasing productivity and reducing development time. Moreover, frameworks often come with active communities, extensive documentation, and ongoing support, contributing to long-term project sustainability and maintenance. In a rapidly evolving technological landscape, leveraging frameworks is not just recommended but essential for achieving scalability, maintainability, and staying current with industry standards.
+
+When selecting frameworks, it's crucial to align choices with project requirements, team expertise, and long-term goals. For server-side development, Node.js with Express is a popular choice due to its scalability and flexibility. React, Vue.js, and Angular stand out in the client-side domain, offering diverse solutions based on project size and complexity. TypeScript, with its static typing, can enhance development in both server and client frameworks, ensuring code reliability. The main thing, is to strike a balance between familiarity, community support, and alignment with project needs. Regularly adapting framework choices based on evolving project requirements and industry trends ensures the development of maintainable, scalable, and future-proof applications.
