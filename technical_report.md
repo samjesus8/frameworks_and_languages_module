@@ -6,8 +6,6 @@ This report endeavors to delve into great detail on programming frameworks and l
 Critique of Server/Client prototype
 ---------------------
 
-### Overview
-
 ### CORS Default Parameter
 
 `./example_server/app/http_server.py`
